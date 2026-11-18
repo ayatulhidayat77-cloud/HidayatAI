@@ -1,0 +1,6 @@
+{
+  "name": "Hidayat AI",
+  "description": "Aplikasi asisten pintar dan penjadwalan otomatis berbasis AI untuk produktivitas aktivitas sehari-hari.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

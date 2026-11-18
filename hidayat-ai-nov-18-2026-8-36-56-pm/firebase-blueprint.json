@@ -1,0 +1,124 @@
+{
+  "entities": {
+    "ScheduleItem": {
+      "title": "ScheduleItem",
+      "description": "A daily schedule item or AI-generated task for productivity tracking.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the scheduled activity (1-150 chars)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description or actionable steps (0-1000 chars)."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["WORK", "STUDY", "HEALTH", "PERSONAL", "CREATIVE"],
+          "description": "Activity category."
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["HIGH", "MEDIUM", "LOW"],
+          "description": "Priority level."
+        },
+        "timeSlot": {
+          "type": "string",
+          "description": "Scheduled time window (e.g., 08:00 - 09:30)."
+        },
+        "dateStr": {
+          "type": "string",
+          "description": "Target date string (YYYY-MM-DD)."
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the scheduled item has been completed."
+        },
+        "aiGenerated": {
+          "type": "boolean",
+          "description": "Whether the item was automatically scheduled by Hidayat AI."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "description",
+        "category",
+        "priority",
+        "timeSlot",
+        "dateStr",
+        "completed",
+        "aiGenerated",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ProductivityNote": {
+      "title": "ProductivityNote",
+      "description": "A saved AI insight, vision analysis result, or productivity note.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID."
+        },
+        "title": {
+          "type": "string",
+          "description": "Note title (1-150 chars)."
+        },
+        "content": {
+          "type": "string",
+          "description": "Full text content of the note or AI analysis (1-5000 chars)."
+        },
+        "tag": {
+          "type": "string",
+          "enum": ["AI_INSIGHT", "VISION_ANALYSIS", "DAILY_BRIEF", "IDEA"],
+          "description": "Classification tag for the note."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation server timestamp (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update server timestamp (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "content",
+        "tag",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/schedules/{scheduleId}": {
+      "schema": "ScheduleItem",
+      "description": "User-scoped daily schedules and AI auto-scheduled tasks."
+    },
+    "/users/{userId}/notes/{noteId}": {
+      "schema": "ProductivityNote",
+      "description": "User-scoped AI insights, image analysis logs, and smart notes."
+    }
+  }
+}

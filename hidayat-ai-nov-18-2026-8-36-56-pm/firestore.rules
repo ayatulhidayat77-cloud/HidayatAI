@@ -1,0 +1,124 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidScheduleCategory(cat) {
+      return cat is string && cat in ['WORK', 'STUDY', 'HEALTH', 'PERSONAL', 'CREATIVE'];
+    }
+
+    function isValidPriority(p) {
+      return p is string && p in ['HIGH', 'MEDIUM', 'LOW'];
+    }
+
+    function isValidScheduleItem(data, userId) {
+      return data.keys().hasAll([
+               'userId', 'title', 'description', 'category', 'priority',
+               'timeSlot', 'dateStr', 'completed', 'aiGenerated', 'createdAt', 'updatedAt'
+             ]) &&
+             data.keys().hasOnly([
+               'userId', 'title', 'description', 'category', 'priority',
+               'timeSlot', 'dateStr', 'completed', 'aiGenerated', 'createdAt', 'updatedAt'
+             ]) &&
+             data.userId is string && data.userId == userId && data.userId == request.auth.uid &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 150 &&
+             data.description is string && data.description.size() <= 1000 &&
+             isValidScheduleCategory(data.category) &&
+             isValidPriority(data.priority) &&
+             data.timeSlot is string && data.timeSlot.size() >= 1 && data.timeSlot.size() <= 40 &&
+             data.dateStr is string && data.dateStr.size() >= 1 && data.dateStr.size() <= 30 &&
+             data.completed is bool &&
+             data.aiGenerated is bool &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidNoteTag(tag) {
+      return tag is string && tag in ['AI_INSIGHT', 'VISION_ANALYSIS', 'DAILY_BRIEF', 'IDEA'];
+    }
+
+    function isValidProductivityNote(data, userId) {
+      return data.keys().hasAll([
+               'userId', 'title', 'content', 'tag', 'createdAt', 'updatedAt'
+             ]) &&
+             data.keys().hasOnly([
+               'userId', 'title', 'content', 'tag', 'createdAt', 'updatedAt'
+             ]) &&
+             data.userId is string && data.userId == userId && data.userId == request.auth.uid &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 150 &&
+             data.content is string && data.content.size() >= 1 && data.content.size() <= 5000 &&
+             isValidNoteTag(data.tag) &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId}/schedules/{scheduleId} {
+      allow get: if isOwner(userId) && isValidId(userId) && isValidId(scheduleId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidId(scheduleId) &&
+                       isValidScheduleItem(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidId(scheduleId) &&
+                       isValidScheduleItem(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'title', 'description', 'category', 'priority',
+                         'timeSlot', 'dateStr', 'completed', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(userId) && isValidId(scheduleId);
+    }
+
+    match /users/{userId}/notes/{noteId} {
+      allow get: if isOwner(userId) && isValidId(userId) && isValidId(noteId);
+      allow list: if isOwner(userId);
+
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidId(noteId) &&
+                       isValidProductivityNote(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidId(noteId) &&
+                       isValidProductivityNote(incoming(), userId) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'title', 'content', 'tag', 'updatedAt'
+                       ]);
+
+      allow delete: if isOwner(userId) && isValidId(userId) && isValidId(noteId);
+    }
+  }
+}

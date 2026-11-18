@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Hidayat AI</string>
+    <string name="app_tagline">Asisten Pintar &amp; Penjadwalan Otomatis</string>
+    <string name="auth_welcome_title">Selamat Datang di Hidayat AI</string>
+    <string name="auth_welcome_subtitle">Maksimalkan produktivitas harian Anda dengan penjadwalan otomatis berbasis AI, asisten diskusi multi-model, analisis dokumen visual, dan sinkronisasi cloud aman.</string>
+    <string name="sign_in_with_google">Masuk dengan Google</string>
+    <string name="sign_out">Keluar</string>
+    <string name="nav_dashboard">Beranda</string>
+    <string name="nav_scheduler">Jadwal AI</string>
+    <string name="nav_assistant">Asisten AI</string>
+    <string name="nav_studio">Studio Visual</string>
+    <string name="nav_notes">Catatan</string>
+    <string name="auto_schedule_title">Penjadwalan Otomatis AI</string>
+    <string name="auto_schedule_hint">Ceritakan target atau aktivitas hari ini (misal: Rapat tim jam 10, belajar coding 2 jam, olahraga sore)...</string>
+    <string name="generate_schedule_btn">Susun Jadwal Otomatis</string>
+    <string name="add_manual_schedule">Tambah Jadwal Manual</string>
+    <string name="daily_briefing_title">Briefing Produktivitas Harian</string>
+    <string name="speak_briefing">Bacakan Briefing (TTS)</string>
+    <string name="stop_speaking">Hentikan Suara</string>
+    <string name="chat_input_hint">Tanyakan strategi, analisis, atau bantuan ke Hidayat AI...</string>
+    <string name="send_message">Kirim</string>
+    <string name="high_thinking_mode">Mode Penalaran Mendalam (Gemini 4 Argon)</string>
+    <string name="vision_analyze_title">Analisis Gambar &amp; Dokumen (Gemini 4 Argon)</string>
+    <string name="image_studio_title">Studio Gambar AI (Nano Banana 2.1 &amp; Pro)</string>
+    <string name="pick_photo">Pilih Foto</string>
+    <string name="generate_image_btn">Buat / Edit Gambar AI</string>
+    <string name="save_to_notes">Simpan ke Catatan Cloud</string>
+    <string name="empty_schedules">Belum ada jadwal untuk tanggal ini. Gunakan Penjadwalan Otomatis AI atau tambah manual!</string>
+    <string name="empty_notes">Belum ada catatan tersimpan. Simpan hasil analisis AI atau tambah catatan baru.</string>
+</resources>
